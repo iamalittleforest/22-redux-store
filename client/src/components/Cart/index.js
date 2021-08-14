@@ -1,20 +1,34 @@
+// import react dependencies
 import React, { useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import { useDispatch, useSelector } from 'react-redux';
+
+// import apollo dependency
 import { useLazyQuery } from '@apollo/client';
+
+// import stripe dependency
+import { loadStripe } from '@stripe/stripe-js';
+
+// import utils dependencies
+import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from '../../utils/actions';
 import { QUERY_CHECKOUT } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
-import CartItem from '../CartItem';
 import Auth from '../../utils/auth';
-import { useStoreContext } from '../../utils/GlobalState';
-import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from '../../utils/actions';
+
+// import component
+import CartItem from '../CartItem';
+
+// import style
 import './style.css';
 
+// returns a promise with the stripe object
 const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 const Cart = () => {
-  const [state, dispatch] = useStoreContext();
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
   const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
+  // redirect to checkout referencing sessionId if data is returned
   useEffect(() => {
     if (data) {
       stripePromise.then((res) => {
@@ -23,6 +37,7 @@ const Cart = () => {
     }
   }, [data]);
 
+  // get items from session and populate cart if it is empty
   useEffect(() => {
     async function getCart() {
       const cart = await idbPromise('cart', 'get');
@@ -38,6 +53,7 @@ const Cart = () => {
     dispatch({ type: TOGGLE_CART });
   }
 
+  // loop through each item in cart, mutiply item.price by the item.purchaseQuantity, and then add to the sum
   function calculateTotal() {
     let sum = 0;
     state.cart.forEach((item) => {
@@ -46,9 +62,9 @@ const Cart = () => {
     return sum.toFixed(2);
   }
 
+  // loop through each item in cart and add item._id to productIds array, which is returned from query
   function submitCheckout() {
     const productIds = [];
-
     state.cart.forEach((item) => {
       for (let i = 0; i < item.purchaseQuantity; i++) {
         productIds.push(item._id);

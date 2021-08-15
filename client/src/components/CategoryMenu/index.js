@@ -16,8 +16,9 @@ function CategoryMenu() {
   const { categories } = state;
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
 
-  // if categoryData, loading, or dispatch is updated, update category based on whether categoryData exists or is loading
+  // if categoryData, loading, or dispatch is updated, update category
   useEffect(() => {
+    // retrieved from server
     if (categoryData) {
       dispatch({
         type: UPDATE_CATEGORIES,
@@ -26,7 +27,9 @@ function CategoryMenu() {
       categoryData.categories.forEach((category) => {
         idbPromise('categories', 'put', category);
       });
-    } else if (!loading) {
+    } 
+    // get cache from idb
+    else if (!loading) {
       idbPromise('categories', 'get').then((categories) => {
         dispatch({
           type: UPDATE_CATEGORIES,

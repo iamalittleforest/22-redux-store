@@ -15,7 +15,7 @@ https://iamalittleforest-22-redux.herokuapp.com/
 * [Contact](#contact)
 
 ## Description
-Redux store is an e-commerce platform that uses Redux to manage the global state.
+Redux Store is an e-commerce platform that uses Redux to manage the global state.
 
 ### Built With
 Apollo Client, Apollo Server (Express), Express, GraphQL, jsonwebtoken, jwt-decode, MongoDB, Mongoose, React, React-Redux, Redux, Redux Toolkit, Stripe

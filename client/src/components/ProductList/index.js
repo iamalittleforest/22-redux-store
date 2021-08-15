@@ -22,8 +22,9 @@ function ProductList() {
   const { currentCategory } = state;
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  // if data, loading, or dispatch is updated, update products based on whether data exists or is loading
+  // if data, loading, or dispatch is updated, update products
   useEffect(() => {
+    // retrieved from server
     if (data) {
       dispatch({
         type: UPDATE_PRODUCTS,
@@ -32,7 +33,9 @@ function ProductList() {
       data.products.forEach((product) => {
         idbPromise('products', 'put', product);
       });
-    } else if (!loading) {
+    } 
+    // get cache from idb
+    else if (!loading) {
       idbPromise('products', 'get').then((products) => {
         dispatch({
           type: UPDATE_PRODUCTS,

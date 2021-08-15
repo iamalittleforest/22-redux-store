@@ -14,10 +14,9 @@ function ProductItem(item) {
   const { image, name, _id, price, quantity } = item;
   const { cart } = state;
 
+  // update cart quantity if itemInCart exists; otherwise add to cart
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id);
-
-    // update cart quantity if itemInCart exists; otherwise add to cart
     if (itemInCart) {
       dispatch({
         type: UPDATE_CART_QUANTITY,

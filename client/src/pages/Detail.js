@@ -1,9 +1,12 @@
+// import react dependencies
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+// import apollo dependency
 import { useQuery } from '@apollo/client';
 
-import Cart from '../components/Cart';
-import { useStoreContext } from '../utils/GlobalState';
+// import utils dependencies
 import {
   REMOVE_FROM_CART,
   UPDATE_CART_QUANTITY,
@@ -12,18 +15,22 @@ import {
 } from '../utils/actions';
 import { QUERY_PRODUCTS } from '../utils/queries';
 import { idbPromise } from '../utils/helpers';
+
+// import component
+import Cart from '../components/Cart';
+
+// import assset
 import spinner from '../assets/spinner.gif';
 
 function Detail() {
-  const [state, dispatch] = useStoreContext();
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
   const { id } = useParams();
-
   const [currentProduct, setCurrentProduct] = useState({});
-
+  const { products, cart } = state;
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const { products, cart } = state;
-
+  // if data, loading, or dispatch is updated, update products
   useEffect(() => {
     // already in global store
     if (products.length) {
@@ -51,6 +58,7 @@ function Detail() {
     }
   }, [products, data, loading, dispatch, id]);
 
+  // update cart quantity if itemInCart exists; otherwise add to cart 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === id);
     if (itemInCart) {
@@ -72,12 +80,12 @@ function Detail() {
     }
   };
 
+  // remove item with currentProduct._id from cart
   const removeFromCart = () => {
     dispatch({
       type: REMOVE_FROM_CART,
       _id: currentProduct._id,
     });
-
     idbPromise('cart', 'delete', { ...currentProduct });
   };
 
@@ -86,11 +94,8 @@ function Detail() {
       {currentProduct && cart ? (
         <div className="container my-1">
           <Link to="/">← Back to Products</Link>
-
           <h2>{currentProduct.name}</h2>
-
           <p>{currentProduct.description}</p>
-
           <p>
             <strong>Price:</strong>${currentProduct.price}{' '}
             <button onClick={addToCart}>Add to Cart</button>
@@ -101,7 +106,6 @@ function Detail() {
               Remove from Cart
             </button>
           </p>
-
           <img
             src={`/images/${currentProduct.image}`}
             alt={currentProduct.name}

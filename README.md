@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Link to Deployed Application
-
+https://iamalittleforest-22-redux.herokuapp.com/
 
 ## Table of Contents
 * [Description](#description)
@@ -15,10 +15,10 @@
 * [Contact](#contact)
 
 ## Description
-
+Redux store is an e-commerce platform that uses Redux to manage the global state.
 
 ### Built With
-
+Apollo Client, Apollo Server (Express), Express, GraphQL, jsonwebtoken, jwt-decode, MongoDB, Mongoose, React, React-Redux, Redux, Redux Toolkit, Stripe
 
 ## Screenshot
 <img src="assets\README-screenshot.png" alt="screenshot">

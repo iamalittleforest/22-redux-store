@@ -21,7 +21,7 @@ const initialState = {
 }
 
 // set the initial state of the reducer
-export default reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_PRODUCTS:
       return {
@@ -94,3 +94,5 @@ export default reducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export default reducer;

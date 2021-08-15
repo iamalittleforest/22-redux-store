@@ -28,7 +28,7 @@ const Cart = () => {
   const state = useSelector(state => state);
   const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
-  // redirect to checkout referencing sessionId if data is returned
+  // if data is updated, and data object exists, redirect to checkout referencing sessionId
   useEffect(() => {
     if (data) {
       stripePromise.then((res) => {
@@ -37,7 +37,7 @@ const Cart = () => {
     }
   }, [data]);
 
-  // get items from session and populate cart if it is empty
+  // if cart.length or dispatch is updated, get items from session and populate cart if it is empty
   useEffect(() => {
     async function getCart() {
       const cart = await idbPromise('cart', 'get');
@@ -49,6 +49,7 @@ const Cart = () => {
     }
   }, [state.cart.length, dispatch]);
 
+  // toggle car when cart icon is clicked
   function toggleCart() {
     dispatch({ type: TOGGLE_CART });
   }
